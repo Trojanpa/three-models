@@ -1,0 +1,30 @@
+{
+  "svn.ignoreMissingSvnWarning": true,
+  "window.zoomLevel": 0.6,
+  "workbench.editor.enablePreview": true,
+  "workbench.sideBar.location": "left",
+  "workbench.iconTheme": "vscode-icons",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.detectIndentation": false,
+  "editor.fontFamily": "Consolas, 'Courier New', monospace,'微软雅黑'",
+  "editor.fontSize": 16,
+  "editor.tabSize": 2,
+  "editor.minimap.enabled": true,
+  "editor.lineHeight": 24,
+  "editor.lineNumbers": "on",
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true,
+    "source.fixAll.eslint": true
+  },
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  "editor.rulers": [120],
+  "eslint.options": {
+    "extensions": [".js", ".jsx", ".ts", ".tsx", ".html", ".vue"]
+  },
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html", "vue"]
+}
