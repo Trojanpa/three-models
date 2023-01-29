@@ -1,0 +1,20 @@
+# 配置不同的编辑器和IDE之间统一的编码风格及样式
+
+root = true                           # 控制 .editorconfig 是否生效的字段
+
+[*.{js,json,jsx,ts,tsx,vue}]          # 匹配结尾为js,jsx,ts,tsx,vue的扩展名文件
+end_of_line = lf                      # 结尾换行符，可选"lf"、"cr"、"crlf"
+indent_style = space                  # 缩进风格，可选"space"、"tab"
+indent_size = 2                       # 缩进的空格数
+trim_trailing_whitespace = true       # 删除一行中的前后空格
+insert_final_newline = true           # 在文件结尾插入新行
+quote_type = single                   # 引号使用单引号
+charset = utf-8                       # 文件编码是 utf-8
+spaces_around_operators = true        # 运算符两边都加上空格
+
+[*.md]                                # 匹配结尾为md的扩展名文件
+trim_trailing_whitespace = false      # 删除一行中的前后空格
+
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2

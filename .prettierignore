@@ -1,0 +1,8 @@
+# 忽略不希望格式化的文件
+
+# Ignore artifacts:
+dist
+public
+
+# Ignore all HTML files:
+*.html

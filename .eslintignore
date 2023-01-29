@@ -1,0 +1,5 @@
+# 需要注意的是，不管你有没有在.eslintignore中进行配置，eslint都会默认忽略掉对/node_modules/ 以及 /bower_components/文件的检查。
+
+# 忽略eslint检查的文件或目录
+dist/
+index.html
