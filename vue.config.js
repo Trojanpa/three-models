@@ -1,4 +1,5 @@
 const { defineConfig } = require('@vue/cli-service');
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = defineConfig({
   publicPath: './',
