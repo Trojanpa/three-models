@@ -1,8 +1,15 @@
-# 忽略不希望格式化的文件
+# 忽略不想格式化的文件或目录，默认忽略node_modules目录
 
-# Ignore artifacts:
+# 忽略目录:
 dist
-public
+/public/*
 
-# Ignore all HTML files:
+# 忽略所有 HTML 文件:
 *.html
+
+# 忽略的文件
+**/*.svg
+**/*.sh
+**/*.d.ts
+pnpm-lock.yaml
+package-lock.json
