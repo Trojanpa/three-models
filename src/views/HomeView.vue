@@ -1,8 +1,8 @@
-<!-- 
+<!--
  * @description: 模型加载
- * @fileName: HomeView.vue 
- * @author: hoo 
- * @date: 2023-01-29 17:22:45 
+ * @fileName: HomeView.vue
+ * @author: hoo
+ * @date: 2023-01-29 17:22:45
 !-->
 
 <template>
@@ -15,6 +15,9 @@
 // 轨道控制器
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+// import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import modelsJson from '@/assets/json/models';
 import * as THREE from 'three';
 let that;
 
@@ -29,6 +32,7 @@ export default {
       ctrlObj: {},
       ctrl: null,
       spotLight: null,
+      wheels: [],
     };
   },
   mounted() {
@@ -77,7 +81,7 @@ export default {
       // 加载场景
       this.createPanorama('scene1.png');
       // 加载模型
-      this.loadModel();
+      this.loadAllModels();
 
       this.renderScene();
     },
@@ -86,16 +90,96 @@ export default {
       // 更新轨道控制器
       // this.controls.update();
 
+      // 让跑车的四个车轮旋转起来
+      const time = -performance.now() / 1000;
+      for (let i = 0; i < this.wheels.length; i++) {
+        this.wheels[i].rotation.x = time * Math.PI * 2;
+      }
+
       requestAnimationFrame(this.renderScene);
       this.renderer.render(this.scene, this.camera);
     },
-    // 加载glTF模型
-    loadModel() {
-      const gltfLoader = new GLTFLoader();
-      gltfLoader.setPath('static/models/glb/');
-      gltfLoader.load('fish1.glb', (gltf) => {
-        that.scene.add(gltf.scene);
+    // 加载多个模型
+    loadAllModels() {
+      const modelsList = modelsJson || [];
+      console.log('modelsJson', modelsList);
+      modelsList.forEach((model) => {
+        this.loadModel(model);
       });
+    },
+    // 加载glTF模型
+    loadModel(model = {}) {
+      const { name, ext } = model;
+      const gltfLoader = new GLTFLoader();
+      // 使用Draco库压缩的几何体的加载器。
+      const dracoLoader = new DRACOLoader();
+      // Draco是一个用于压缩和解压缩3D网格和点云的开源库。
+      dracoLoader.setDecoderPath('/static/libs/draco/');
+      gltfLoader.setDRACOLoader(dracoLoader);
+      gltfLoader.setPath(`static/models/${ext}/`);
+      gltfLoader.load(`${name}.${ext}`, (gltf) => {
+        if (name === 'ferrari') {
+          that.changeStyle(gltf);
+        } else {
+          that.scene.add(gltf.scene);
+        }
+      });
+    },
+    changeStyle(gltf) {
+      const shadow = new THREE.TextureLoader().load('static/models/glb/ferrari_ao.png');
+      // 主体材质
+      const bodyMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x1a2ec1,
+        metalness: 1.0,
+        roughness: 0.8,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.2,
+      });
+      // 细节材质
+      const detailsMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 1.0,
+        roughness: 0.5,
+      });
+      // 玻璃材质
+      const glassMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.25,
+        roughness: 0,
+        transmission: 1.0,
+      });
+      const carModel = gltf.scene.children[0];
+      carModel.scale.multiplyScalar(4);
+      carModel.rotation.y = Math.PI;
+      carModel.getObjectByName('body').material = bodyMaterial;
+      carModel.getObjectByName('rim_fl').material = detailsMaterial;
+      carModel.getObjectByName('rim_fr').material = detailsMaterial;
+      carModel.getObjectByName('rim_rr').material = detailsMaterial;
+      carModel.getObjectByName('rim_rl').material = detailsMaterial;
+      carModel.getObjectByName('trim').material = detailsMaterial;
+      carModel.getObjectByName('glass').material = glassMaterial;
+      // 获取跑车四个车轮
+      that.wheels.push(
+        carModel.getObjectByName('wheel_fl'),
+        carModel.getObjectByName('wheel_fr'),
+        carModel.getObjectByName('wheel_rl'),
+        carModel.getObjectByName('wheel_rr'),
+      );
+      // shadow
+      const mesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.655 * 4, 1.3 * 4),
+        new THREE.MeshBasicMaterial({
+          map: shadow,
+          blending: THREE.MultiplyBlending,
+          toneMapped: false,
+          transparent: true,
+        }),
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.renderOrder = 2;
+      carModel.add(mesh);
+      // that.scene.add(gltf.scene);
+      that.scene.add(carModel);
     },
     // 加载场景球体全景
     createPanorama(pngName) {
