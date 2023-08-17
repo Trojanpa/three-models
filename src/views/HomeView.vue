@@ -13,12 +13,12 @@
 
 <script>
 // 轨道控制器
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 // import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import modelsJson from '@/assets/json/models';
-import * as THREE from 'three';
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import modelsJson from "@/assets/json/models";
+import * as THREE from "three";
 let that;
 
 export default {
@@ -38,7 +38,7 @@ export default {
   mounted() {
     that = this;
     this.init();
-    window.addEventListener('resize', this.onWindowResize.bind(this));
+    window.addEventListener("resize", this.onWindowResize.bind(this));
   },
   methods: {
     init() {
@@ -50,7 +50,7 @@ export default {
       this.renderer.setClearColor(new THREE.Color(0x000000));
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.shadowMap.enabled = true;
-      document.getElementById('canvasId').appendChild(this.renderer.domElement);
+      document.getElementById("canvasId").appendChild(this.renderer.domElement);
 
       // 添加三维坐标轴，轴长50
       this.axes = new THREE.AxesHelper(50);
@@ -79,7 +79,7 @@ export default {
       this.scene.add(ambientLight);
 
       // 加载场景
-      this.createPanorama('scene1.png');
+      this.createPanorama("scene1.png");
       // 加载模型
       this.loadAllModels();
 
@@ -102,7 +102,7 @@ export default {
     // 加载多个模型
     loadAllModels() {
       const modelsList = modelsJson || [];
-      console.log('modelsJson', modelsList);
+      console.log("modelsJson", modelsList);
       modelsList.forEach((model) => {
         this.loadModel(model);
       });
@@ -114,11 +114,11 @@ export default {
       // 使用Draco库压缩的几何体的加载器。
       const dracoLoader = new DRACOLoader();
       // Draco是一个用于压缩和解压缩3D网格和点云的开源库。
-      dracoLoader.setDecoderPath('/static/libs/draco/');
+      dracoLoader.setDecoderPath("/static/libs/draco/");
       gltfLoader.setDRACOLoader(dracoLoader);
       gltfLoader.setPath(`static/models/${ext}/`);
       gltfLoader.load(`${name}.${ext}`, (gltf) => {
-        if (name === 'ferrari') {
+        if (name === "ferrari") {
           that.changeStyle(gltf);
         } else {
           that.scene.add(gltf.scene);
@@ -126,7 +126,7 @@ export default {
       });
     },
     changeStyle(gltf) {
-      const shadow = new THREE.TextureLoader().load('static/models/glb/ferrari_ao.png');
+      const shadow = new THREE.TextureLoader().load("static/models/glb/ferrari_ao.png");
       // 主体材质
       const bodyMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x1a2ec1,
@@ -151,19 +151,19 @@ export default {
       const carModel = gltf.scene.children[0];
       carModel.scale.multiplyScalar(4);
       carModel.rotation.y = Math.PI;
-      carModel.getObjectByName('body').material = bodyMaterial;
-      carModel.getObjectByName('rim_fl').material = detailsMaterial;
-      carModel.getObjectByName('rim_fr').material = detailsMaterial;
-      carModel.getObjectByName('rim_rr').material = detailsMaterial;
-      carModel.getObjectByName('rim_rl').material = detailsMaterial;
-      carModel.getObjectByName('trim').material = detailsMaterial;
-      carModel.getObjectByName('glass').material = glassMaterial;
+      carModel.getObjectByName("body").material = bodyMaterial;
+      carModel.getObjectByName("rim_fl").material = detailsMaterial;
+      carModel.getObjectByName("rim_fr").material = detailsMaterial;
+      carModel.getObjectByName("rim_rr").material = detailsMaterial;
+      carModel.getObjectByName("rim_rl").material = detailsMaterial;
+      carModel.getObjectByName("trim").material = detailsMaterial;
+      carModel.getObjectByName("glass").material = glassMaterial;
       // 获取跑车四个车轮
       that.wheels.push(
-        carModel.getObjectByName('wheel_fl'),
-        carModel.getObjectByName('wheel_fr'),
-        carModel.getObjectByName('wheel_rl'),
-        carModel.getObjectByName('wheel_rr'),
+        carModel.getObjectByName("wheel_fl"),
+        carModel.getObjectByName("wheel_fr"),
+        carModel.getObjectByName("wheel_rl"),
+        carModel.getObjectByName("wheel_rr"),
       );
       // shadow
       const mesh = new THREE.Mesh(
@@ -208,7 +208,7 @@ export default {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
       // this.controls.update();
       // 采用另一种方法来实现坐标轴旋转，即在轨道控制器的change事件添加渲染函数作为它的回调函数，这样当我们拖动鼠标的时候就可以实时渲染画面了
-      this.controls.addEventListener('change', this.renderScene);
+      this.controls.addEventListener("change", this.renderScene);
     },
   },
 };

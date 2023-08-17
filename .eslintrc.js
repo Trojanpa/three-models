@@ -19,9 +19,9 @@ module.exports = {
     // 强制switch要有default分支
     "default-case": 2,
     // 强制使用一致的缩进（"SwitchCase"（默认：0) 强制 switch 语句中 case 子句的缩进级别。缩进 2 个空格并将 SwitchCase 设置为 1 将缩进 case 子句，其中 2 个空格相对于 switch 语句。）
-    indent: 0,
+    "indent": 0,
     // 强制使用骆驼拼写法命名约定
-    camelcase: 0,
+    "camelcase": 0,
     // 函数表达式必须有名字
     "func-names": 0,
     // 单引号
